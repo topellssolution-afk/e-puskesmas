@@ -27,6 +27,12 @@ export default function Navbar() {
                 Pendaftaran Pasien
               </Link>
               <Link
+                href="/patients"
+                className="hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Daftar Pasien
+              </Link>
+              <Link
                 href="/schedule"
                 className="hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >

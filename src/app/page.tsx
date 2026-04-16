@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Users, Calendar, Stethoscope, Clock } from "lucide-react";
+import VisitsChart from "@/components/VisitsChart";
 
 export default function Home() {
   return (
@@ -9,25 +10,35 @@ export default function Home() {
         <p className="mt-2 text-gray-600">Sistem Informasi Manajemen Puskesmas Terpadu</p>
       </header>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <VisitsChart />
+        </div>
+
+        <div className="grid grid-cols-1 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 mb-1">Total Pasien</h3>
+              <p className="text-2xl font-bold text-gray-900">1,248</p>
+            </div>
+            <div className="p-3 bg-blue-100 text-blue-600 rounded-full">
+              <Users className="w-6 h-6" />
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 mb-1">Antrean Hari Ini</h3>
+              <p className="text-2xl font-bold text-gray-900">45</p>
+            </div>
+            <div className="p-3 bg-green-100 text-green-600 rounded-full">
+              <Calendar className="w-6 h-6" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center">
-          <div className="p-3 bg-blue-100 text-blue-600 rounded-full mb-4">
-            <Users className="w-8 h-8" />
-          </div>
-          <h3 className="text-lg font-semibold mb-2">Total Pasien</h3>
-          <p className="text-3xl font-bold text-blue-600">1,248</p>
-          <p className="text-sm text-gray-500 mt-2">+12 hari ini</p>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center">
-          <div className="p-3 bg-green-100 text-green-600 rounded-full mb-4">
-            <Calendar className="w-8 h-8" />
-          </div>
-          <h3 className="text-lg font-semibold mb-2">Antrean Hari Ini</h3>
-          <p className="text-3xl font-bold text-green-600">45</p>
-          <p className="text-sm text-gray-500 mt-2">15 telah dilayani</p>
-        </div>
-
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center">
           <div className="p-3 bg-purple-100 text-purple-600 rounded-full mb-4">
             <Stethoscope className="w-8 h-8" />

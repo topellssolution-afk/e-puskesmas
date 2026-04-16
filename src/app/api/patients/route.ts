@@ -32,6 +32,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: 'Patient registered successfully', patient: newPatient }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to register patient' }, { status: 500 });
+    console.error('Error in POST /api/patients:', error);
+    return NextResponse.json({ error: 'Failed to register patient', details: error }, { status: 500 });
   }
 }

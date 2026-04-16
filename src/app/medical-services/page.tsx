@@ -2,6 +2,13 @@
 
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
+
+type Patient = {
+  id: string;
+  name: string;
+  poli: string;
+};
 
 type FormData = {
   patientId: string;
@@ -15,12 +22,41 @@ type FormData = {
 };
 
 export default function MedicalServices() {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    toast.success("Data pelayanan medis berhasil disimpan!");
-    reset();
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const res = await fetch("/api/patients");
+        if (res.ok) {
+          const data = await res.json();
+          setPatients(data.patients);
+        }
+      } catch (error) {
+        console.error("Failed to fetch patients", error);
+      }
+    };
+    fetchPatients();
+  }, []);
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await fetch('/api/medical-records', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error('Failed to submit');
+
+      toast.success("Data pelayanan medis berhasil disimpan!");
+      reset();
+    } catch (error) {
+      toast.error("Gagal menyimpan data", {
+        description: "Terjadi kesalahan sistem, silakan coba lagi.",
+      });
+    }
   };
 
   return (
@@ -35,10 +71,11 @@ export default function MedicalServices() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Nama Pasien</label>
-              <select {...register("patientId")} className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+              <select {...register("patientId", { required: true })} className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
                 <option value="">Pilih Pasien dari Antrean...</option>
-                <option value="1">Budi Santoso (Poli Umum)</option>
-                <option value="2">Siti Aminah (Poli Gigi)</option>
+                {patients.map(p => (
+                  <option key={p.id} value={p.id}>{p.name} ({p.poli})</option>
+                ))}
               </select>
             </div>
             <div>
@@ -92,8 +129,8 @@ export default function MedicalServices() {
             <button type="button" onClick={() => reset()} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
               Reset
             </button>
-            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors">
-              Simpan Pemeriksaan
+            <button type="submit" disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-6 rounded-md transition-colors">
+              {isSubmitting ? 'Menyimpan...' : 'Simpan Pemeriksaan'}
             </button>
           </div>
         </form>

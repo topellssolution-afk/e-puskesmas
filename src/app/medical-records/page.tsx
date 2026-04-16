@@ -1,13 +1,40 @@
 "use client";
 
 import { Search, FileText } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type MedicalRecord = {
+  id: string;
+  createdAt: string;
+  diagnosis: string;
+  doctorId: string;
+  patient: {
+    nik: string;
+    name: string;
+  }
+};
 
 export default function MedicalRecords() {
-  const records = [
-    { id: "RM-001", patientName: "Budi Santoso", lastVisit: "2023-10-15", diagnosis: "Hipertensi", doctor: "dr. Andi Wijaya" },
-    { id: "RM-002", patientName: "Siti Aminah", lastVisit: "2023-10-20", diagnosis: "Karies Gigi", doctor: "drg. Rina Mulyani" },
-    { id: "RM-003", patientName: "Agus Salim", lastVisit: "2023-11-02", diagnosis: "ISPA", doctor: "dr. Andi Wijaya" },
-  ];
+  const [records, setRecords] = useState<MedicalRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecords = async () => {
+      try {
+        const res = await fetch("/api/medical-records");
+        if (res.ok) {
+          const data = await res.json();
+          setRecords(data.records);
+        }
+      } catch (error) {
+        console.error("Failed to fetch medical records", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecords();
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -41,20 +68,34 @@ export default function MedicalRecords() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {records.map((record) => (
-                <tr key={record.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-blue-600">{record.id}</td>
-                  <td className="px-6 py-4 text-gray-900">{record.patientName}</td>
-                  <td className="px-6 py-4 text-gray-600">{record.lastVisit}</td>
-                  <td className="px-6 py-4 text-gray-600">{record.diagnosis}</td>
-                  <td className="px-6 py-4 text-gray-600">{record.doctor}</td>
-                  <td className="px-6 py-4">
-                    <button className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 font-medium">
-                      <FileText className="h-4 w-4" /> Detail
-                    </button>
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    Memuat data rekam medis...
                   </td>
                 </tr>
-              ))}
+              ) : records.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    Belum ada data rekam medis.
+                  </td>
+                </tr>
+              ) : (
+                records.map((record) => (
+                  <tr key={record.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-blue-600">{record.patient.nik}</td>
+                    <td className="px-6 py-4 text-gray-900">{record.patient.name}</td>
+                    <td className="px-6 py-4 text-gray-600">{new Date(record.createdAt).toLocaleDateString('id-ID')}</td>
+                    <td className="px-6 py-4 text-gray-600">{record.diagnosis}</td>
+                    <td className="px-6 py-4 text-gray-600">{record.doctorId === 'dr1' ? 'dr. Andi Wijaya' : 'drg. Rina Mulyani'}</td>
+                    <td className="px-6 py-4">
+                      <button className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 font-medium">
+                        <FileText className="h-4 w-4" /> Detail
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

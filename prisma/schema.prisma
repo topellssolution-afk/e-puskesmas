@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Patient {
@@ -17,4 +17,19 @@ model Patient {
   phone            String
   poli             String
   registrationDate DateTime @default(now())
+  medicalRecords   MedicalRecord[]
+}
+
+model MedicalRecord {
+  id            String   @id @default(cuid())
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  doctorId      String
+  anamnesis     String
+  bloodPressure String
+  temperature   String
+  diagnosis     String
+  procedures    String
+  prescriptions String
+  createdAt     DateTime @default(now())
 }

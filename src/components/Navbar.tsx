@@ -38,6 +38,24 @@ export default function Navbar() {
               >
                 Jadwal Dokter
               </Link>
+              <Link
+                href="/medical-records"
+                className="hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Rekam Medis
+              </Link>
+              <Link
+                href="/medical-services"
+                className="hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Pelayanan Medis
+              </Link>
+              <Link
+                href="/settings"
+                className="hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Pengaturan
+              </Link>
             </div>
           </div>
         </div>

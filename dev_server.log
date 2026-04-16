@@ -1,0 +1,13 @@
+
+> e-puskesmas@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 541ms
+
+○ Compiling / ...
+ GET / 200 in 6.9s (next.js: 6.4s, application-code: 542ms)
+ GET /registration 200 in 807ms (next.js: 608ms, application-code: 199ms)
+ GET /schedule 200 in 562ms (next.js: 471ms, application-code: 90ms)
